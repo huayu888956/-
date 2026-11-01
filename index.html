@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>七八官网</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background: #0c0a04;
+    overflow-x: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #fff;
+    min-height: 100vh;
+  }
+  #particles {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 20px 14px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  /* 上方主面板 金色主题 */
+  .hero-panel {
+    background: rgba(42, 34, 16, 0.35);
+    border: 1px solid rgba(255, 210, 90, 0.25);
+    border-radius: 24px;
+    padding: 18px 16px 20px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(6px);
+  }
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #ffd270;
+    padding-bottom: 16px;
+  }
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-left::before {
+    content: "◆";
+    color: #ffc857;
+  }
+  .status-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .online-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ffdd60;
+    box-shadow: 0 0 8px #ffdd60;
+  }
+  .title-area {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .main-title {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ffd050, #ffaa22);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 6px;
+  }
+  .sub-title {
+    font-size: 15px;
+    color: #d4b880;
+    letter-spacing: 4px;
+  }
+  .sub-title span {
+    margin: 0 6px;
+  }
+  .btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  /* 按钮容器，用于承载金光扩散效果 */
+  .btn-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  .btn-card {
+    display:block;
+    background: rgba(38, 30, 14, 0.55);
+    border: 1px solid rgba(255, 200, 70, 0.24);
+    border-radius: 20px;
+    padding: 16px 8px;
+    text-align: center;
+    text-decoration:none;
+    color:#fff;
+  }
+  /* 点击金光波纹 */
+  .gold‑ripple {
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,220,80,0.55) 0%, rgba(255,180,40,0) 70%);
+    transform:scale(0);
+    pointer-events:none;
+  }
+  .btn-icon {
+    font-size: 30px;
+    margin-bottom: 4px;
+  }
+  .btn-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 3px;
+  }
+  .btn-desc {
+    font-size: 13px;
+    color: #d2b47c;
+  }
+  .btn-full {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+  }
+  /* 公告面板 金色 */
+  .notice-panel {
+    background: rgba(42, 34, 16, 0.35);
+    border: 1px solid rgba(255, 210, 90, 0.25);
+    border-radius: 24px;
+    padding: 18px 16px 22px;
+    backdrop-filter: blur(6px);
+  }
+  .notice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .notice-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .notice-bell {
+    font-size: 18px;
+  }
+  .notice-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffd270;
+  }
+  .star {
+    color: #d4b880;
+  }
+  .tag-top {
+    background: rgba(130, 100, 30, 0.3);
+    color: #ffddaa;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  .notice-body {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #f0ddbc;
+  }
+  .notice-body p {
+    margin-bottom: 8px;
+  }
+  .text-blue {
+    color: #ffdd77;
+  }
+  .text-red {
+    color: #ff8878;
+  }
+  .text-orange {
+    color: #ffcc66;
+  }
+  /* 公告内部底部版权 */
+  .copyright-line {
+    margin-top: 24px;
+    padding-top:16px;
+    border-top:1px solid rgba(255,190,60,0.18);
+    text-align:center;
+    color:#b89c68;
+    font-size:13px;
+  }
+  .copyright-sub {
+    margin-top:10px;
+    text-align:center;
+    color:#b89c68;
+    font-size:14px;
+    letter-spacing:2px;
+  }
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div class="app">
+  <div class="hero-panel">
+    <div class="status-bar">
+      <div class="status-left">78网络</div>
+      <div class="status-right">
+        <span class="online-dot"></span>
+        <span>系统在线</span>
+      </div>
+    </div>
+    <div class="title-area">
+      <div class="main-title">七八官网</div>
+      <div class="sub-title">
+        <span>◆</span> 极致 · 纯粹 · 未来 <span>◆</span>
+      </div>
+    </div>
+    <div class="btn-grid">
+      <!-- 修改href为你的跳转网址 -->
+      <div class="btn-wrap">
+        <a class="btn-card" href="https://78.czvip.cn/" target="_blank">
+          <div class="btn-icon">🚀</div>
+          <div class="btn-title">立即前往卡网题卡</div>
+          <div class="btn-desc">卡网 · 题卡</div>
+        </a>
+      </div>
+
+      <div class="btn-wrap">
+        <a class="btn-card" href="https://qun.qq.com/universal-share/share?ac=1&authKey=yYYoqu%2BgaCSZTktiW%2BjuWCNcwot0vFwu4DZ5uj8aqkUk6Xoi1Sj1X2tJwf%2B%2F4Zr7&busi_data=eyJncm91cENvZGUiOiI3MTQ4MDc4OTUiLCJ0b2tlbiI6ImJ2R0VZV3dPUXJRR1M4Wjg1Z1NJMGpNTk1mdVBYYlI1NHJDMUVCKy9vQStRK3gyZ3ZwTE54VW90bjFtQS9sRDIiLCJ1aW4iOiIzODUwMjI1MzEyIn0%3D&data=dQdVbhhbzKLMSyIO3ZMVPBa9lWpeAh4bid0dLzDf0heTJyVIOfwmjkZLda2vsMcOagoZXgEXjwLJHLAzOl39Aw&svctype=4&tempid=h5_group_info">
+          <div class="btn-icon">💬</div>
+          <div class="btn-title">立即加入官方Q群</div>
+          <div class="btn-desc">QQ 群组</div>
+        </a>
+      </div>
+
+      <div class="btn-wrap btn-full">
+        <a class="btn-card" href="https://t.me/qiba007" target="_blank">
+          <div class="btn-icon">📡</div>
+          <div class="btn-title">加入官方TG频道</div>
+          <div class="btn-desc">Telegram</div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="notice-panel">
+    <div class="notice-header">
+      <div class="notice-left">
+        <span class="notice-bell">🔔</span>
+        <span class="star">☆</span>
+        <span class="notice-title">七八全项目公告声明</span>
+        <span class="star">☆</span>
+      </div>
+      <div class="tag-top">置顶</div>
+    </div>
+    <div class="notice-body">
+      <p>
+        本系列作品仅供学习研究，使用者的任何行为与应用无关，请在24小时内删除本应用
+        <span class="text-blue">[下载代表同意本协议]</span>
+      </p>
+      <p>若有侵权违法行为，请联系我方删除内容</p>
+      <p>本卡网均为<span class="text-orange">自愿捐赠</span></p>
+      <p class="text-red">无root玩家请勿下单，下单默认同意</p>
+      <p class="text-red">不支持米八 下单默认同意</p>
+      <p>有事联系客服 恶意投诉拉黑删卡处理</p>
+    </div>
+    <div class="copyright-line">© 1391 78 · 本页面仅供引导 &nbsp; v7.8.1</div>
+    <div class="copyright-sub">◆ 科技 · 纯粹 ◆</div>
+  </div>
+</div>
+
+<script>
+// ==========按钮点击金光波纹效果==========
+document.querySelectorAll('.btn-wrap').forEach(wrap=>{
+  const link = wrap.querySelector('.btn-card');
+  wrap.addEventListener('mousedown',function(e){
+    let ripple = document.createElement('span');
+    ripple.classList.add('gold‑ripple');
+    let rect = wrap.getBoundingClientRect();
+    let size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
+    ripple.style.animation = "rippleAnim 0.45s ease‑out forwards";
+    wrap.appendChild(ripple);
+    setTimeout(()=>ripple.remove(),450);
+  })
+})
+// 波纹动画定义
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+@keyframes rippleAnim {
+  0% { transform:scale(0); opacity:1; }
+  100% { transform:scale(2.2); opacity:0; }
+}
+`;
+document.head.appendChild(styleSheet);
+
+// =========金色粒子星空特效==========
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let w = (canvas.width = window.innerWidth);
+let h = (canvas.height = window.innerHeight);
+window.addEventListener("resize", () => {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  rebuild();
+});
+const particles = [];
+const count = 110;
+// 金色粒子配色
+const colorList = [
+  "rgba(255,210,70,0.58)",
+  "rgba(255,170,40,0.52)",
+  "rgba(255,230,130,0.46)"
+];
+class Particle {
+  constructor() {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.r = Math.random() * 1.15 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.18;
+    this.vy = (Math.random() - 0.5) * 0.18;
+    this.color = colorList[Math.floor(Math.random() * colorList.length)];
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > w) this.vx *= -1;
+    if (this.y < 0 || this.y > h) this.vy *= -1;
+  }
+}
+function build() {
+  particles.length = 0;
+  for (let i = 0; i < count; i++) {
+    particles.push(new Particle());
+  }
+}
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const p1 = particles[i];
+      const p2 = particles[j];
+      const dx = p1.x - p2.x;
+      const dy = p1.y - p2.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < 110) {
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = "rgba(255, 200, 60, 0.22)";
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+function render() {
+  ctx.fillStyle = "rgba(12, 10, 4, 0.28)";
+  ctx.fillRect(0, 0, w, h);
+  particles.forEach((p) => {
+    p.update();
+    p.draw();
+  });
+  drawLines();
+  requestAnimationFrame(render);
+}
+function rebuild() {
+  build();
+}
+build();
+render();
+</script>
+</body>
+</html>

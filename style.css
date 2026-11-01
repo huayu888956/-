@@ -1,0 +1,10 @@
+<script>
+document.querySelector('.agree-btn').addEventListener('click', function() {
+    alert('你已同意条款，正在跳转...');
+    // 这里可以改成你的目标网址，比如 window.location.href = "https://你的网站.com";
+});
+
+document.querySelector('.reject-btn').addEventListener('click', function() {
+    window.close(); // 关闭当前页面
+});
+</script>
