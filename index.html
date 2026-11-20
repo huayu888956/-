@@ -4,389 +4,589 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>话语官网</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   }
+
   body {
-    background: #0c0a04;
-    overflow-x: hidden;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #fff;
     min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.18), transparent 28%),
+      radial-gradient(circle at 80% 20%, rgba(129, 140, 248, 0.18), transparent 30%),
+      radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.22), transparent 36%),
+      linear-gradient(180deg, #05070d 0%, #070b18 48%, #081024 100%);
+    color: #e6f1ff;
+    position: relative;
   }
+
   #particles {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 0;
   }
-  .app {
+
+  /* 外层一整个大卡牌 */
+  .outer-big-card {
+    position: relative;
+    z-index: 2;
+    margin: 12px 12px 14px;
+    padding: 14px 16px 18px;
+    border-radius: 26px;
+    background:
+      linear-gradient(160deg,
+        rgba(14, 24, 48, 0.52) 0%,
+        rgba(22, 34, 64, 0.32) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow:
+      0 10px 40px rgba(15, 23, 42, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
+
+  .outer-big-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    padding: 1px;
+    background: linear-gradient(140deg,
+      rgba(148, 163, 184, 0.38),
+      rgba(125, 211, 252, 0.22),
+      rgba(129, 140, 248, 0.14),
+      transparent 45%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+                 linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* 顶部两个独立小标签 */
+  .top-tags {
     position: relative;
     z-index: 1;
-    min-height: 100vh;
-    padding: 20px 14px 24px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  /* 上方主面板 金色主题 */
-  .hero-panel {
-    background: rgba(42, 34, 16, 0.35);
-    border: 1px solid rgba(255, 210, 90, 0.25);
-    border-radius: 24px;
-    padding: 18px 16px 20px;
-    margin-bottom: 14px;
-    backdrop-filter: blur(6px);
-  }
-  .status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
-    color: #ffd270;
-    padding-bottom: 16px;
+    margin-bottom: 10px;
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .status-left::before {
-    content: "◆";
-    color: #ffc857;
-  }
-  .status-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .online-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #ffdd60;
-    box-shadow: 0 0 8px #ffdd60;
-  }
-  .title-area {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .main-title {
-    font-size: 46px;
-    font-weight: 800;
+
+  .mini-tag {
+    position: relative;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    font-size: 11px;
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #ffd050, #ffaa22);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #cbd5e1;
+  }
+
+  .mini-tag.right {
+    color: #a5b4fc;
+  }
+
+  .mini-tag .dot-icon {
+    font-size: 12px;
+    line-height: 1;
+    color: #38bdf8;
+    filter: drop-shadow(0 0 7px rgba(56, 189, 248, 0.75));
+  }
+
+  .mini-tag.right::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+  }
+
+  .top-divider {
+    position: relative;
+    z-index: 1;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(148, 163, 184, 0.4),
+      rgba(125, 211, 252, 0.22),
+      transparent);
+    margin-bottom: 12px;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    padding: 0 18px 40px;
+  }
+
+  /* 标题区：加强流光与发光 */
+  .title-wrap {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    background: linear-gradient(90deg,
+      #38bdf8 0%,
+      #e0f2fe 20%,
+      #7dd3fc 35%,
+      #818cf8 50%,
+      #e0f2fe 65%,
+      #38bdf8 80%,
+      #818cf8 100%);
+    background-size: 220% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 6px;
+    animation: shine 3s linear infinite;
+    filter: drop-shadow(0 0 16px rgba(125, 211, 252, 0.65));
+    margin-bottom: 10px;
   }
+
+  @keyframes shine {
+    to {
+      background-position: 220% center;
+    }
+  }
+
+  /* 呼吸灯：加强亮度、尺寸变化和蓝紫脉冲 */
+  .breathing-bar {
+    position: relative;
+    height: 4px;
+    margin: 10px auto 0;
+    width: 44%;
+    max-width: 280px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(56, 189, 248, 0.85),
+      rgba(125, 211, 252, 0.95),
+      rgba(129, 140, 248, 0.85),
+      transparent);
+    filter: blur(0.8px);
+    animation: breathe 2s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scaleX(0.45);
+      opacity: 0.5;
+      box-shadow:
+        0 0 10px rgba(56, 189, 248, 0.55),
+        0 0 24px rgba(125, 211, 252, 0.35),
+        0 0 40px rgba(129, 140, 248, 0.25);
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
+      box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.95),
+        0 0 36px rgba(125, 211, 252, 0.75),
+        0 0 60px rgba(129, 140, 248, 0.55);
+    }
+  }
+
   .sub-title {
-    font-size: 15px;
-    color: #d4b880;
-    letter-spacing: 4px;
+    font-size: 12px;
+    letter-spacing: 7px;
+    color: #a5b4fc;
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.55);
   }
+
   .sub-title span {
-    margin: 0 6px;
+    margin: 0 8px;
+    color: #c7d2fe;
   }
-  .btn-grid {
+
+  /* 三张按钮卡片 */
+  .grid-box {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 11px;
   }
-  /* 按钮容器，用于承载金光扩散效果 */
-  .btn-wrap {
+  .card-link{
+    text-decoration: none;
+  }
+  .card {
+    position: relative;
+    background: linear-gradient(160deg,
+      rgba(15, 23, 42, 0.55) 0%,
+      rgba(30, 41, 59, 0.35) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 -6px 18px rgba(0, 0, 0, 0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 14px 30px rgba(15, 23, 42, 0.7),
+      0 0 0 1px rgba(125, 211, 252, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(140deg,
+      rgba(148, 163, 184, 0.35),
+      rgba(125, 211, 252, 0.18),
+      transparent 40%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+                 linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .card .icon {
+    font-size: 30px;
+    margin-bottom: 7px;
+    filter: drop-shadow(0 0 12px rgba(125, 211, 252, 0.75));
+  }
+
+  .card .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e0f2fe;
+    margin-bottom: 3px;
+    text-shadow: 0 0 10px rgba(125, 211, 252, 0.55);
+  }
+
+  .card .desc {
+    font-size: 11px;
+    color: #94a3b8;
+    letter-spacing: 2px;
+  }
+
+  .card-full {
+    grid-column: 1 / -1;
+  }
+
+  /* 公告区：加强蓝紫脉冲变色 */
+  .notice-box {
+    background: linear-gradient(160deg,
+      rgba(14, 24, 52, 0.48) 0%,
+      rgba(28, 38, 80, 0.26) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    padding: 18px;
     position: relative;
     overflow: hidden;
-    border-radius: 20px;
+    animation: noticeColor 4.5s ease-in-out infinite;
   }
-  .btn-card {
-    display:block;
-    background: rgba(38, 30, 14, 0.55);
-    border: 1px solid rgba(255, 200, 70, 0.24);
-    border-radius: 20px;
-    padding: 16px 8px;
-    text-align: center;
-    text-decoration:none;
-    color:#fff;
+
+  @keyframes noticeColor {
+    0%, 100% {
+      box-shadow:
+        0 0 22px rgba(56, 189, 248, 0.22),
+        0 0 40px rgba(56, 189, 248, 0.12),
+        inset 0 0 22px rgba(56, 189, 248, 0.08);
+      border-color: rgba(125, 211, 252, 0.28);
+    }
+    50% {
+      box-shadow:
+        0 0 32px rgba(129, 140, 248, 0.38),
+        0 0 60px rgba(129, 140, 248, 0.22),
+        inset 0 0 32px rgba(129, 140, 248, 0.16);
+      border-color: rgba(129, 140, 248, 0.45);
+    }
   }
-  /* 点击金光波纹 */
-  .gold‑ripple {
-    position:absolute;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(255,220,80,0.55) 0%, rgba(255,180,40,0) 70%);
-    transform:scale(0);
-    pointer-events:none;
+
+  .notice-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(148, 163, 184, 0.38),
+      rgba(125, 211, 252, 0.22),
+      transparent);
   }
-  .btn-icon {
-    font-size: 30px;
-    margin-bottom: 4px;
-  }
-  .btn-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 3px;
-  }
-  .btn-desc {
-    font-size: 13px;
-    color: #d2b47c;
-  }
-  .btn-full {
-    grid-column: 1 / -1;
-    margin-top: 2px;
-  }
-  /* 公告面板 金色 */
-  .notice-panel {
-    background: rgba(42, 34, 16, 0.35);
-    border: 1px solid rgba(255, 210, 90, 0.25);
-    border-radius: 24px;
-    padding: 18px 16px 22px;
-    backdrop-filter: blur(6px);
-  }
-  .notice-header {
+
+  .notice-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    gap: 10px;
   }
-  .notice-left {
+
+  .notice-title {
     display: flex;
     align-items: center;
-    gap: 6px;
-  }
-  .notice-bell {
-    font-size: 18px;
-  }
-  .notice-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: #ffd270;
-  }
-  .star {
-    color: #d4b880;
-  }
-  .tag-top {
-    background: rgba(130, 100, 30, 0.3);
-    color: #ffddaa;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-  }
-  .notice-body {
+    gap: 8px;
     font-size: 14px;
-    line-height: 1.75;
-    color: #f0ddbc;
+    font-weight: 700;
+    color: #7dd3fc;
+    letter-spacing: 2px;
+    flex: 1;
   }
-  .notice-body p {
-    margin-bottom: 8px;
+
+  .bell-icon {
+    font-size: 15px;
+    line-height: 1;
+    color: #fbbf24;
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.55));
   }
-  .text-blue {
-    color: #ffdd77;
+
+  .star-icon {
+    font-size: 13px;
+    line-height: 1;
+    color: rgba(253, 230, 138, 0.45);
+    filter: drop-shadow(0 0 4px rgba(253, 230, 138, 0.4));
   }
-  .text-red {
-    color: #ff8878;
+
+  .notice-head .tag {
+    font-size: 11px;
+    line-height: 1;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.12);
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    white-space: nowrap;
+    letter-spacing: 2px;
   }
-  .text-orange {
-    color: #ffcc66;
+
+  .notice-content {
+    font-size: 12px;
+    line-height: 1.95;
+    color: #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
-  /* 公告内部底部版权 */
-  .copyright-line {
-    margin-top: 24px;
-    padding-top:16px;
-    border-top:1px solid rgba(255,190,60,0.18);
-    text-align:center;
-    color:#b89c68;
-    font-size:13px;
+
+  .notice-content p {
+    display: block;
+    width: 100%;
   }
-  .copyright-sub {
-    margin-top:10px;
-    text-align:center;
-    color:#b89c68;
-    font-size:14px;
-    letter-spacing:2px;
+
+  .red-highlight {
+    color: #fca5a5;
+    font-weight: 600;
+  }
+
+  .agree-highlight {
+    color: #fcd34d;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(252, 211, 77, 0.45);
+  }
+
+  .notice-footer {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .copy {
+    font-size: 11px;
+    color: #64748b;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .foot-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+    letter-spacing: 2px;
+  }
+
+  .foot-nav span {
+    opacity: 0.8;
   }
 </style>
 </head>
 <body>
-<canvas id="particles"></canvas>
-<div class="app">
-  <div class="hero-panel">
-    <div class="status-bar">
-      <div class="status-left">话语网络</div>
-      <div class="status-right">
-        <span class="online-dot"></span>
-        <span>系统在线</span>
+  <canvas id="particles"></canvas>
+
+  <!-- 外层一整个大卡牌 -->
+  <div class="outer-big-card">
+    <div class="top-tags">
+      <div class="mini-tag">
+        <span class="dot-icon">✦</span>
+        话语网络
       </div>
+      <div class="mini-tag right">系统在线</div>
     </div>
-    <div class="title-area">
-      <div class="main-title">话语官网</div>
+
+    <div class="top-divider"></div>
+
+    <div class="title-wrap">
+      <h1>话语官网</h1>
       <div class="sub-title">
-        <span>◆</span> 极致 · 纯粹 · 未来 <span>◆</span>
+        极致 <span>◆</span> 纯粹 <span>◆</span> 未来
       </div>
+      <div class="breathing-bar"></div>
     </div>
-    <div class="btn-grid">
-      <!-- 修改href为你的跳转网址 -->
-      <div class="btn-wrap">
-        <a class="btn-card" href="https://q3g.66url.cn/GZB" target="_blank">
-          <div class="btn-icon">🚀</div>
-          <div class="btn-title">立即前往卡网题卡</div>
-          <div class="btn-desc">卡网 · 题卡</div>
-        </a>
+
+    <div class="grid-box">
+      <!-- 卡片1 -->
+      <a href="https://ys.melognb.cn/shop/G544UUAH" class="card-link">
+        <div class="card">
+          <div class="icon">🚀</div>
+          <div class="name">主卡网</div>
+          <div class="desc">卡网</div>
+        </div>
+      </a>
+      <!-- 卡片2 -->
+      <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=w0dGrk%2BxOrB%2FmNBuCiFqZ7EkTyym50CtPdz%2BjAt8hzbtX2QWTrr53M5Vg6gJbhXU&busi_data=eyJncm91cENvZGUiOiI3OTI3NzYzMjQiLCJ0b2tlbiI6IndnQUZVRVl0cXlzLzNlUkJEaHF2NG04WGd6WU01NDcyc2Jjb0xVVHZYZmZOOHQ4c3JXZ2cyLzRQMWUweGFqT1ciLCJ1aW4iOiIyODczMTI5NTczIn0%3D&data=c7ZWLrtcHbOQMw7f_AZNiggQKzwRbncrnHSnC06LFywifODbqBLKaZ8rDIN4rULxS4ndNxPqs5gP-yVsniFZ5Q&svctype=4&tempid=h5_group_info" class="card-link">
+        <div class="card">
+          <div class="icon">💬</div>
+          <div class="name">QQ群</div>
+          <div class="desc">加入QQ群</div>
+        </div>
+      </a>
+      <!-- 卡片3 -->
+      <a href="https://t.me/HYY969" class="card-link card-full">
+        <div class="card">
+          <div class="icon">📡</div>
+          <div class="name">加入官方TG频道</div>
+          <div class="desc">Telegram</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="notice-box">
+      <div class="notice-head">
+        <div class="notice-title">
+          <span class="bell-icon">🔔</span>
+          <span class="star-icon">⭐</span>
+          话语全项目公告声明
+          <span class="star-icon">⭐</span>
+        </div>
+        <div class="tag">置 顶</div>
       </div>
 
-      <div class="btn-wrap">
-        <a class="btn-card" href="https://qun.qq.com/universal-share/share?ac=1&authKey=w0dGrk%2BxOrB%2FmNBuCiFqZ7EkTyym50CtPdz%2BjAt8hzbtX2QWTrr53M5Vg6gJbhXU&busi_data=eyJncm91cENvZGUiOiI3OTI3NzYzMjQiLCJ0b2tlbiI6IndnQUZVRVl0cXlzLzNlUkJEaHF2NG04WGd6WU01NDcyc2Jjb0xVVHZYZmZOOHQ4c3JXZ2cyLzRQMWUweGFqT1ciLCJ1aW4iOiIyODczMTI5NTczIn0%3D&data=c7ZWLrtcHbOQMw7f_AZNiggQKzwRbncrnHSnC06LFywifODbqBLKaZ8rDIN4rULxS4ndNxPqs5gP-yVsniFZ5Q&svctype=4&tempid=h5_group_info">
-          <div class="btn-icon">💬</div>
-          <div class="btn-title">立即加入官方Q群</div>
-          <div class="btn-desc">QQ 群组</div>
-        </a>
+      <div class="notice-content">
+        <p>本系列作品仅供学习研究，使用者的任何行为与应用无关，请在24小时内删除本应用 <span class="agree-highlight">[下载代表同意本协议]</span></p>
+        <p>若有侵权违法行为，请联系我方删除内容</p>
+        <p><span class="red-highlight">本卡网均为自愿捐赠</span></p>
+        <p><span class="red-highlight">有事联系客服，恶意投诉拉黑删卡处理</span></p>
+        <p><span class="red-highlight">无root权限请勿下载，下载默认同意</span></p>
       </div>
 
-      <div class="btn-wrap btn-full">
-        <a class="btn-card" href="https://t.me/HYY969" target="_blank">
-          <div class="btn-icon">📡</div>
-          <div class="btn-title">加入官方TG频道</div>
-          <div class="btn-desc">Telegram</div>
-        </a>
+      <div class="notice-footer">
+        <div class="copy">© 1991 话语·本页面仅供学习 v2.8.1</div>
+        <div class="foot-nav">
+          <span>首页</span>
+          <span>|</span>
+          <span>卡网</span>
+          <span>|</span>
+          <span>纯粹</span>
+          <span>|</span>
+          <span>未来</span>
+        </div>
       </div>
     </div>
   </div>
-  <div class="notice-panel">
-    <div class="notice-header">
-      <div class="notice-left">
-        <span class="notice-bell">🔔</span>
-        <span class="star">☆</span>
-        <span class="notice-title">话语全项目公告声明</span>
-        <span class="star">☆</span>
-      </div>
-      <div class="tag-top">置顶</div>
-    </div>
-    <div class="notice-body">
-      <p>
-        本系列作品仅供学习研究，使用者的任何行为与应用无关，请在24小时内删除本应用
-        <span class="text-blue">[下载代表同意本协议]</span>
-      </p>
-      <p>若有侵权违法行为，请联系我方删除内容</p>
-      <p>本卡网均为<span class="text-orange">自愿捐赠</span></p>
-      <p>有事联系客服 恶意投诉拉黑删卡处理</p>
-    </div>
-    <div class="copyright-line">© 1391 话语 · 本页面仅供引导 &nbsp; v7.8.1</div>
-    <div class="copyright-sub">◆ 科技 · 纯粹 ◆</div>
-  </div>
-</div>
 
 <script>
-// ==========按钮点击金光波纹效果==========
-document.querySelectorAll('.btn-wrap').forEach(wrap=>{
-  const link = wrap.querySelector('.btn-card');
-  wrap.addEventListener('mousedown',function(e){
-    let ripple = document.createElement('span');
-    ripple.classList.add('gold‑ripple');
-    let rect = wrap.getBoundingClientRect();
-    let size = Math.max(rect.width, rect.height);
-    ripple.style.width = ripple.style.height = size + "px";
-    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
-    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
-    ripple.style.animation = "rippleAnim 0.45s ease‑out forwards";
-    wrap.appendChild(ripple);
-    setTimeout(()=>ripple.remove(),450);
-  })
-})
-// 波纹动画定义
-const styleSheet = document.createElement("style");
-styleSheet.textContent = `
-@keyframes rippleAnim {
-  0% { transform:scale(0); opacity:1; }
-  100% { transform:scale(2.2); opacity:0; }
-}
-`;
-document.head.appendChild(styleSheet);
+  const canvas = document.getElementById("particles");
+  const ctx = canvas.getContext("2d");
+  let particles = [];
+  let w, h;
 
-// =========金色粒子星空特效==========
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let w = (canvas.width = window.innerWidth);
-let h = (canvas.height = window.innerHeight);
-window.addEventListener("resize", () => {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-  rebuild();
-});
-const particles = [];
-const count = 110;
-// 金色粒子配色
-const colorList = [
-  "rgba(255,210,70,0.58)",
-  "rgba(255,170,40,0.52)",
-  "rgba(255,230,130,0.46)"
-];
-class Particle {
-  constructor() {
-    this.x = Math.random() * w;
-    this.y = Math.random() * h;
-    this.r = Math.random() * 1.15 + 0.3;
-    this.vx = (Math.random() - 0.5) * 0.18;
-    this.vy = (Math.random() - 0.5) * 0.18;
-    this.color = colorList[Math.floor(Math.random() * colorList.length)];
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
   }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > w) this.vx *= -1;
-    if (this.y < 0 || this.y > h) this.vy *= -1;
-  }
-}
-function build() {
-  particles.length = 0;
-  for (let i = 0; i < count; i++) {
-    particles.push(new Particle());
-  }
-}
-function drawLines() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const p1 = particles[i];
-      const p2 = particles[j];
-      const dx = p1.x - p2.x;
-      const dy = p1.y - p2.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 110) {
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = "rgba(255, 200, 60, 0.22)";
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
+
+  function createParticles() {
+    particles = [];
+    const count = Math.min(180, Math.floor((w * h) / 11000));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: (Math.random() - 0.5) * 0.22,
+        alpha: Math.random() * 0.4 + 0.12,
+        color: Math.random() > 0.5 ? "125, 211, 252" : "129, 140, 248"
+      });
     }
   }
-}
-function render() {
-  ctx.fillStyle = "rgba(12, 10, 4, 0.28)";
-  ctx.fillRect(0, 0, w, h);
-  particles.forEach((p) => {
-    p.update();
-    p.draw();
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach((p, i) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = `rgba(${p.color}, 0.6)`;
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(125, 211, 252, ${0.14 * (1 - dist / 90)})`;
+          ctx.lineWidth = 0.5;
+          ctx.shadowBlur = 0;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", () => {
+    resize();
+    createParticles();
   });
-  drawLines();
-  requestAnimationFrame(render);
-}
-function rebuild() {
-  build();
-}
-build();
-render();
+
+  resize();
+  createParticles();
+  draw();
 </script>
 </body>
 </html>
